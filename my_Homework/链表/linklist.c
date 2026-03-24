@@ -7,10 +7,10 @@ node* creat_linklist()
     node *head=NULL; //定义头指针
     node *tail=NULL; //定义尾指针
 
+    printf("请输入链表数据(按下-1结束输入):\n");
     while(1)
     {
         elemtype num; //要输入的链表数据
-        printf("请输入链表数据(按下-1结束输入):\n");
         scanf("%d",&num);
         if(num == -1)
         {
@@ -31,6 +31,7 @@ node* creat_linklist()
             tail->next=pnew; //先将数据进行链接
             tail=pnew; //然后再将尾指针更新到最后
         }
+        
     }
 
     return head;
@@ -178,6 +179,7 @@ node *destroy_list(node *head)
         free(temp);
         temp=NULL;
     }
+    printf("链表已销毁!\n");
 
     return NULL;
 }
@@ -199,21 +201,77 @@ int get_node_count(node *head)
 //逆置单链表
 node *reverse_list(node *head)
 {
-    node *p=head;
-    node *pre=NULL;
-    node *tail=NULL;
+    node *p=head; //移动指针
+    node *pre=NULL; //前一个指针
+    node *tail=NULL; //后一个指针
     if(head == NULL || head->next == NULL)
     {
         return head;
     }
     while(p != NULL)
     {
-        tail=p->next;
-        p->next=pre;
+        tail=p->next; //提前存入下一个节点，防止断链
+        p->next=pre; //反转，让下一个节点的指向，指向前一个节点
         pre=p;
         p=tail;
     }
     head=pre;
+
+    return head;
+}
+
+//自动创建升序链表
+node *create_list_asc(void)
+{
+    node *head=NULL;
+    node *tail=NULL;
+    node *p=NULL;
+    node *pre=NULL;
+    elemtype num;
+    printf("请输入链表数据:\n");
+    while(1)
+    {
+        scanf("%d",&num);
+        if(num == -1)
+        {
+            break;
+        }
+        node *pnew=(node *)malloc(sizeof(node));
+        pnew->data=num;
+        pnew->next=NULL;
+
+        if(head == NULL) //第一次输入数据
+        {
+            head=pnew;
+        }
+        else
+        {
+            p=head; //每次输入重置p指针，让其重更新指向头指针
+            pre=NULL; //同理
+            while(p!=NULL && (pnew->data)>(p->data)) //如果输入的数据大于p的数据就继续循环找
+            {
+                pre=p; //记录p遍历的前一个节点
+                p=p->next;
+            }
+            //当找到比输入的数据大的就自动跳出循环，并分情况
+            if(pre == NULL) //1、p就是头指针，用头插法
+            {
+                pnew->next=head;
+                head=pnew;
+            }
+            else if(p != NULL) //2、数据在中间
+            {
+                pre->next=pnew;
+                pnew->next=p;
+            }
+            else //3、输入的数据是最大的，尾插法
+            {
+                pre->next=pnew;
+                pnew->next=NULL;
+                tail=pnew;
+            }
+        }
+    }
 
     return head;
 }

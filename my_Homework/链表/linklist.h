@@ -16,6 +16,7 @@ node *add_a_node(node *head,elemtype x,elemtype a);
 node *delete_node(node *head,elemtype x);
 node *destroy_list(node *head);
 int get_node_count(node *head);
-node *reverser_list(node *head);
+node *reverse_list(node *head);
+node *create_list_asc(void);
 
 #endif
